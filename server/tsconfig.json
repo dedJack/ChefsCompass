@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "rootDir": "src",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "sourceMap": true,          // Generate source maps for debugging
+    "lib": ["es6", "dom"],    // Include ES6 and DOM library definitions
+    "moduleResolution": "node", // Use Node.js module resolution
+    "baseUrl": ".",             // Base directory to resolve non-absolute module names
+    "paths": {                // Map module names to locations
+      "*": ["src/*"]
+    },
+    },
+  "include": ["src/**/*"],       // Include all files in the 'src' directory
+  "exclude": ["node_modules"]    // Exclude the 'node_modules' directory
+}

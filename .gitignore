@@ -1,0 +1,15 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# React Native
+android/
+ios/
+build/
+dist/
+
+# Environment files
+.env
+.env.*
