@@ -6,7 +6,7 @@ import connectToMongoDB from "./db/db";
 dotenv.config();
 const app: Express = express();
 app.use(cors());
-app.use(express());
+app.use(express.json());
 connectToMongoDB();
 
 const port = process.env.PORT || 5000;
