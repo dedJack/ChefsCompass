@@ -1,5 +1,6 @@
-import { createContext, ReactNode, useState} from 'react';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {createContext, ReactNode, useState} from 'react';
 
 const API_URL = 'http://10.0.2.2:5000';
 
@@ -8,7 +9,11 @@ interface AuthContextData {
   token: string | null;
   userId: string | null;
   isLoading: boolean;
-  signUp: (email: string, password: string) => Promise<boolean>;
+  signUp: (
+    username: string,
+    email: string,
+    password: string,
+  ) => Promise<boolean>;
   signIn: (email: string, password: string) => Promise<boolean>;
   signOut: () => Promise<void>;
 }
@@ -24,14 +29,69 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsloading] = useState(false);
 
+  const signUp = async (
+    username: string,
+    email: string,
+    password: string,
+  ): Promise<boolean> => {
+    try {
+      const result = await axios.post(`${API_URL}/api/auth/register`, {
+        username,
+        email,
+        password,
+      });
+
+      if (result.status) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      console.log(e);
+      if (axios.isAxiosError(e)) {
+        console.error('Error Details ', e.response?.data);
+      }
+      return false;
+    }
+  };
+
   const signIn = async (email: string, password: string): Promise<boolean> => {
-    return true;
+    try {
+      const result = await axios.post(`${API_URL}/api/auth/login`, {
+        email,
+        password,
+      });
+      const {token, userId, success} = result.data;
+      if (success) {
+        //save token and userid to asyncStorage.
+        await AsyncStorage.setItem('token', token);
+        setToken(token);
+        await AsyncStorage.setItem('userId', userId);
+        setUserId(userId);
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      console.log(e);
+      if (axios.isAxiosError(e)) {
+        console.error('Error Details ', e.response?.data);
+      }
+      return false;
+    }
   };
-  const signUp = async (email: string, password: string): Promise<boolean> => {
-    console.log(email, password);
-    return true;
+
+  const signOut = async (): Promise<void> => {
+    try {
+      await AsyncStorage.removeItem('token');
+      await AsyncStorage.removeItem('userId');
+      setToken(null);
+      setUserId(null);
+    } catch (e) {
+      console.log(e);
+    }
+    
   };
-  const signOut = async(): Promise<void> => {};
 
   return (
     <AuthContext.Provider

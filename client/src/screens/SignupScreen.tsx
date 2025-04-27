@@ -23,16 +23,20 @@ interface SignupScreenProp {
 const SignupScreen: React.FC<SignupScreenProp> = ({navigation}) => {
   const {signUp} = useContext(AuthContext);
 
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSingup = async () => {
-    if (email && password) {
-      const success = await signUp(email, password);
+    if (username && email && password) {
+      const success = await signUp(username, email, password);
       if (success) {
+        //Do something.
+        navigation.navigate('Login');
+
+        setUsername('');
         setEmail('');
         setPassword('');
-        //Do something.
       } else {
         Alert.alert('Sign up failed, Please try again.');
       }
@@ -45,6 +49,14 @@ const SignupScreen: React.FC<SignupScreenProp> = ({navigation}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Sign Up</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="username"
+        keyboardType="default"
+        autoCapitalize="none"
+        value={username}
+        onChangeText={setUsername}
+      />
       <TextInput
         style={styles.input}
         placeholder="Email"

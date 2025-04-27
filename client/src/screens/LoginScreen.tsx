@@ -1,7 +1,15 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React, {useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {RootStackScreenTypeProp} from '../navigation/RootNavigation';
+import {AuthContext} from '../context/AuthContext';
 
 export type LoginScreenNavigationProp = NativeStackNavigationProp<
   RootStackScreenTypeProp,
@@ -12,11 +20,24 @@ interface loginScreenProp {
   navigation: LoginScreenNavigationProp;
 }
 const LoginScreen: React.FC<loginScreenProp> = ({navigation}) => {
+  const {signIn} = useContext(AuthContext);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-   
+    if (email && password) {
+      const success = await signIn(email, password);
+      if (success) {
+        navigation.navigate('HomeScreen');
+      }else{
+        Alert.alert('Login failed, Please try again.');
+      }
+    } else {
+      Alert.alert('Invalid credentials, enter both email and password');
+      setEmail('');
+      setPassword('');
+    }
   };
   return (
     <View style={styles.container}>
