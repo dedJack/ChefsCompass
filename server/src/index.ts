@@ -2,11 +2,15 @@ import dotenv from "dotenv";
 import cors from "cors";
 import express, { Express } from "express";
 import connectToMongoDB from "./db/db";
+import authRoutes from './routes/Auth'
 
 dotenv.config();
 const app: Express = express();
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/auth',authRoutes);
+
 connectToMongoDB();
 
 const port = process.env.PORT || 5000;
