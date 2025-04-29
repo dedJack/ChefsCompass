@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   Alert,
   Button,
@@ -26,7 +26,7 @@ interface HomeScreenProp {
 }
 const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
   const {signOut} = useContext(AuthContext);
-  const {createRecipe} = useContext(RecipeContext)
+  const {createRecipe,recipes,fetchRecipe} = useContext(RecipeContext)
 
   const [searchRecipe, setSearchRecipe] = useState('');
   const [showModel, setShowModel] = useState(false);
@@ -52,6 +52,16 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
       },
     ]);
   };
+
+
+  //continue render the recipe data to show updated data
+  useEffect(() => {
+    // fetchRecipeById();
+    fetchRecipe();    
+  },[]);
+
+  console.log("All recipes: ",recipes)
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
