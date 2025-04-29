@@ -2,7 +2,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React, {useContext, useEffect} from 'react';
 import {Text, View} from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
-import RecepieDetails from '../screens/RecepieDetails';
+import RecipeDetails from '../screens/RecipeDetails';
 import SignupScreen from '../screens/SignupScreen';
 import LoginScreen from '../screens/LoginScreen';
 import {
@@ -16,7 +16,7 @@ export type RootStackScreenTypeProp = {
   Login: undefined;
   Signup: undefined;
   HomeScreen: undefined;
-  RecepieDetail: {recepieId: string};
+  RecipeDetail: {recipeId: string};
 };
 
 const Stack = createNativeStackNavigator<RootStackScreenTypeProp>();
@@ -62,9 +62,9 @@ const RootNavigation: React.FC = () => {
         component={SignupScreen}
       />
       <Stack.Screen
-        name="RecepieDetail"
+        name="RecipeDetail"
         options={{headerShown: false}}
-        component={RecepieDetails}
+        component={RecipeDetails}
       />
     </Stack.Navigator>
   );
