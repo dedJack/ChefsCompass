@@ -37,7 +37,7 @@ router.get('/get-recipes',authMiddleware,async(req:AuthRequest,res:Response)=>{
     try {
         const fetchRecipe = await Recipe.find({});
         res.status(201).json({success:true,message:"Recipe successfully fetched.",fetchRecipe});
-        
+        return;
     } catch (e) {
         console.error(e);
         res.status(500).json({success:false,message:"Intenal server error"});
@@ -52,6 +52,23 @@ router.get('/get-recipes-id',authMiddleware,async(req:AuthRequest,res:Response)=
         const fetchRecipeById = await Recipe.find({createdAt:req.userId});
         res.status(201).json({success:true,message:"Recipe successfully fetched.",fetchRecipeById});
     }catch(e){
+        console.error(e);
+        res.status(500).json({success:false,message:"Intenal server error"});
+        return;
+    }
+})
+
+//route 4:get recipe by Id.
+router.get('/get-recipes/:params',authMiddleware,async(req:AuthRequest, res:Response)=>{
+    try {
+        const recipeId = req.params.params;
+        const recipeDetail = await Recipe.findById(recipeId);
+        if(!recipeDetail){
+            res.status(404).json({success:true,message:"recipe not found."});
+        }
+        res.status(200).json({success:true, message:"Recepie found.",data: recipeDetail});
+        return;
+    } catch (e) {
         console.error(e);
         res.status(500).json({success:false,message:"Intenal server error"});
         return;
