@@ -17,6 +17,7 @@ interface RecepieContextData {
     recipe: Omit<Recipe, '_id' | 'createdBy' | 'createdAt'>,
   ) => Promise<void>;
   fetchRecipe:()=>Promise<void>;
+  fetchSingleRecipe:(id:string)=>Promise<Recipe | null>;
   // fetchRecipeById:()=>Promise<void>;
 }
 
@@ -62,11 +63,31 @@ export const RecipeProvider: React.FC<{children: ReactNode}> = ({children}) => {
       });
       if(result.data.success){
         setRecipes(result.data.fetchRecipe);
+      }else{
+        console.log("No recipes found.")
       }
     } catch (e) {
       console.error(e);
     }
   };
+
+  //fetch recipe detail by id.
+  const fetchSingleRecipe = async (id:string): Promise<Recipe | null>=>{
+    try {
+      const result = await axios.get(`${API_URL}/api/recipe/get-recipes/${id}`,{
+        headers:{
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      if(result.data.success){
+        return result.data.data;
+      }
+      return null;
+    } catch (e) {
+      console.error(e);
+      throw e; 
+    }
+  }
 
 //fetch all recipes created by single user profile.
 // const fetchRecipeById=async()=>{
@@ -84,7 +105,7 @@ export const RecipeProvider: React.FC<{children: ReactNode}> = ({children}) => {
 // }
 
   return (
-    <RecipeContext.Provider value={{recipes, createRecipe, fetchRecipe}}>
+    <RecipeContext.Provider value={{recipes, createRecipe, fetchRecipe,fetchSingleRecipe}}>
       {children}
     </RecipeContext.Provider>
   );

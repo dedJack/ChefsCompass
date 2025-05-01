@@ -10,10 +10,11 @@ import {Recipe} from '../context/RecipeContext';
 
 interface recipeItemProp {
   recipe: Recipe;
+  onPressRecipeItem: ()=>void
 }
-const RecipeItem: React.FC<recipeItemProp> = ({recipe}) => {
+const RecipeItem: React.FC<recipeItemProp> = ({recipe, onPressRecipeItem}) => {
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={onPressRecipeItem}>
       <View style={styles.cardContent}>
         <Text style={styles.title}>{recipe.title}</Text>
         <Text style={styles.description}>{recipe.description}</Text>

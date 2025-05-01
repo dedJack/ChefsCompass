@@ -32,11 +32,14 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
   const [searchRecipe, setSearchRecipe] = useState('');
   const [showModel, setShowModel] = useState(false);
 
+  //Submit new recipe
   const handleCreateRecipeSubmit = async (
     new_recipe: Omit<Recipe, '_id' | 'createdAt' | 'createdBy'>,
   ) => {
     createRecipe(new_recipe);
   };
+
+  //logout
   const handleLogout = () => {
     console.log('logout listening');
     Alert.alert('Logout', 'Do you want to logout', [
@@ -60,74 +63,70 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
     fetchRecipe();
   }, []);
 
-  console.log('All recipes: ', recipes);
-
   return (
-    <ScrollView contentContainerStyle={{ paddingVertical: 10 }}>
-
     
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <TextInput
-          style={styles.searchText}
-          placeholder="Search recipes...."
-          value={searchRecipe}
-          onChangeText={setSearchRecipe}
-        />
-        <TouchableOpacity style={styles.addMenu}>
-          <Text
-            style={styles.addMenuText}
-            onPress={() => {
-              setShowModel(!showModel);
-            }}>
-            +
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btn} onPress={handleLogout}>
-          <Text style={styles.btnText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Render all recipe Item */}
-      <FlatList
-        data={recipes}
-        renderItem={({item}) => <RecipeItem recipe={item} />}
-      />
-
-      {/* Modal for creating new recipe */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={showModel}
-        onRequestClose={() => setShowModel(false)}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <CreateRecipeForm
-              onCancle={() => {
-                {
-                  /* Render all recipe Item */
-                }
-                <FlatList
-                  data={recipes}
-                  renderItem={({item}) => <RecipeItem recipe={item} />}
-                />;
-                setShowModel(false);
-              }}
-              onSubmit={handleCreateRecipeSubmit}
-            />
-          </View>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TextInput
+            style={styles.searchText}
+            placeholder="Search recipes...."
+            value={searchRecipe}
+            onChangeText={setSearchRecipe}
+          />
+          <TouchableOpacity style={styles.addMenu}>
+            <Text
+              style={styles.addMenuText}
+              onPress={() => {
+                setShowModel(!showModel);
+              }}>
+              +
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn} onPress={handleLogout}>
+            <Text style={styles.btnText}>Logout</Text>
+          </TouchableOpacity>
         </View>
-      </Modal>
-    </View>
-    </ScrollView>
+
+        {/* Render all recipe Item */}
+        <FlatList
+          data={recipes}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          renderItem={({item}) => (
+            <RecipeItem
+              recipe={item}
+              onPressRecipeItem={() =>
+                navigation.navigate('RecipeDetail', {recipeId: item._id})
+              }
+            />
+          )}
+        />
+
+        {/* Modal for creating new recipe */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showModel}
+          onRequestClose={() => setShowModel(false)}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <CreateRecipeForm
+                onCancle={() => {
+                  setShowModel(false);
+                }}
+                onSubmit={handleCreateRecipeSubmit}
+              />
+            </View>
+          </View>
+        </Modal>
+      </View>
+    
   );
 };
 
 const styles = StyleSheet.create({
-
   container: {
     top: 45,
-    marginBottom:40,
+    marginBottom: 40,
   },
   header: {
     backgroundColor: 'blue',
