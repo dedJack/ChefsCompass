@@ -1,20 +1,21 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {
   Alert,
-  Button,
   Modal,
-  Pressable,
+  FlatList,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackScreenTypeProp} from '../navigation/RootNavigation';
 import CreateRecipeForm from '../components/CreateRecipeForm';
 import {Recipe, RecipeContext} from '../context/RecipeContext';
+import RecipeItem from '../components/RecipeItem';
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<
   RootStackScreenTypeProp,
@@ -26,7 +27,7 @@ interface HomeScreenProp {
 }
 const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
   const {signOut} = useContext(AuthContext);
-  const {createRecipe,recipes,fetchRecipe} = useContext(RecipeContext)
+  const {createRecipe, recipes, fetchRecipe} = useContext(RecipeContext);
 
   const [searchRecipe, setSearchRecipe] = useState('');
   const [showModel, setShowModel] = useState(false);
@@ -53,16 +54,18 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
     ]);
   };
 
-
   //continue render the recipe data to show updated data
   useEffect(() => {
     // fetchRecipeById();
-    fetchRecipe();    
-  },[]);
+    fetchRecipe();
+  }, []);
 
-  console.log("All recipes: ",recipes)
+  console.log('All recipes: ', recipes);
 
   return (
+    <ScrollView contentContainerStyle={{ paddingVertical: 10 }}>
+
+    
     <View style={styles.container}>
       <View style={styles.header}>
         <TextInput
@@ -83,37 +86,55 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
         <TouchableOpacity style={styles.btn} onPress={handleLogout}>
           <Text style={styles.btnText}>Logout</Text>
         </TouchableOpacity>
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={showModel}
-          onRequestClose={() => setShowModel(false)}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <CreateRecipeForm
-                onCancle={() => {
-                  setShowModel(false);
-                }}
-                onSubmit={handleCreateRecipeSubmit}
-              />
-            </View>
-          </View>
-        </Modal>
       </View>
+
+      {/* Render all recipe Item */}
+      <FlatList
+        data={recipes}
+        renderItem={({item}) => <RecipeItem recipe={item} />}
+      />
+
+      {/* Modal for creating new recipe */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showModel}
+        onRequestClose={() => setShowModel(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <CreateRecipeForm
+              onCancle={() => {
+                {
+                  /* Render all recipe Item */
+                }
+                <FlatList
+                  data={recipes}
+                  renderItem={({item}) => <RecipeItem recipe={item} />}
+                />;
+                setShowModel(false);
+              }}
+              onSubmit={handleCreateRecipeSubmit}
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+
   container: {
     top: 45,
-    backgroundColor: 'blue',
+    marginBottom:40,
   },
   header: {
+    backgroundColor: 'blue',
+    marginBottom: 1,
     flexDirection: 'row',
-    marginVertical: 15,
-    marginHorizontal: 8,
+    paddingVertical: 15,
+    paddingHorizontal: 8,
     // justifyContent: 'center',
   },
   searchText: {
