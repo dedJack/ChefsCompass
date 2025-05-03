@@ -16,9 +16,9 @@ interface RecepieContextData {
   createRecipe: (
     recipe: Omit<Recipe, '_id' | 'createdBy' | 'createdAt'>,
   ) => Promise<void>;
-  fetchRecipe:()=>Promise<void>;
-  fetchSingleRecipe:(id:string)=>Promise<Recipe | null>;
-  // fetchRecipeById:()=>Promise<void>;
+  fetchRecipe: () => Promise<void>;
+  fetchSingleRecipe: (id: string) => Promise<Recipe | null>;
+  deleteSingleRecipe: (id: string) => Promise<void>;
 }
 
 export const RecipeContext = createContext<RecepieContextData>(
@@ -53,7 +53,7 @@ export const RecipeProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
-  //fetch all recipe 
+  //fetch all recipe
   const fetchRecipe = async () => {
     try {
       const result = await axios.get(`${API_URL}/api/recipe/get-recipes`, {
@@ -61,10 +61,10 @@ export const RecipeProvider: React.FC<{children: ReactNode}> = ({children}) => {
           Authorization: `Bearer ${token}`,
         },
       });
-      if(result.data.success){
+      if (result.data.success) {
         setRecipes(result.data.fetchRecipe);
-      }else{
-        console.log("No recipes found.")
+      } else {
+        console.log('No recipes found.');
       }
     } catch (e) {
       console.error(e);
@@ -72,40 +72,74 @@ export const RecipeProvider: React.FC<{children: ReactNode}> = ({children}) => {
   };
 
   //fetch recipe detail by id.
-  const fetchSingleRecipe = async (id:string): Promise<Recipe | null>=>{
+  const fetchSingleRecipe = async (id: string): Promise<Recipe | null> => {
     try {
-      const result = await axios.get(`${API_URL}/api/recipe/get-recipes/${id}`,{
-        headers:{
-          Authorization: `Bearer ${token}`,
+      const result = await axios.get(
+        `${API_URL}/api/recipe/get-recipes/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      })
-      if(result.data.success){
+      );
+      if (result.data.success) {
         return result.data.data;
       }
       return null;
     } catch (e) {
       console.error(e);
-      throw e; 
+      throw e;
     }
-  }
+  };
 
-//fetch all recipes created by single user profile.
-// const fetchRecipeById=async()=>{
-//   try {
-//     const result = await axios.get(`${API_URL}/api/recipe/get-recipes-id`,{
-//       headers:{
-//         Authorization:`Bearer ${token}`,
-//       },
-//     });
-//     console.log('Get all recipe by this ID : ',result.data);
-//   } catch (e) {
-//     console.error(e);
-    
-//   }
-// }
+  //fetch and delete recipe by Id.
+  const deleteSingleRecipe = async (id: string): Promise<void> => {
+    try {
+      const result = await axios.delete(
+        `${API_URL}/api/recipe/get-recipes/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      if (result.data.success) {
+        const updatedRecipes = recipes.filter(
+          recipe => recipe._id.toString() !== id.toString(),
+        );
+        // console.log(updatedRecipes);
+        setRecipes(updatedRecipes);
+      }
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  };
+
+  //fetch all recipes created by single user profile.
+  // const fetchRecipeById=async()=>{
+  //   try {
+  //     const result = await axios.get(`${API_URL}/api/recipe/get-recipes-id`,{
+  //       headers:{
+  //         Authorization:`Bearer ${token}`,
+  //       },
+  //     });
+  //     console.log('Get all recipe by this ID : ',result.data);
+  //   } catch (e) {
+  //     console.error(e);
+
+  //   }
+  // }
 
   return (
-    <RecipeContext.Provider value={{recipes, createRecipe, fetchRecipe,fetchSingleRecipe}}>
+    <RecipeContext.Provider
+      value={{
+        recipes,
+        createRecipe,
+        fetchRecipe,
+        fetchSingleRecipe,
+        deleteSingleRecipe,
+      }}>
       {children}
     </RecipeContext.Provider>
   );

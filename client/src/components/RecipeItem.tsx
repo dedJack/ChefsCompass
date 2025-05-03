@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,13 +6,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Recipe} from '../context/RecipeContext';
+import {Recipe, RecipeContext} from '../context/RecipeContext';
 
 interface recipeItemProp {
   recipe: Recipe;
   onPressRecipeItem: ()=>void
 }
 const RecipeItem: React.FC<recipeItemProp> = ({recipe, onPressRecipeItem}) => {
+
+  const {deleteSingleRecipe} = useContext(RecipeContext);
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPressRecipeItem}>
       <View style={styles.cardContent}>
@@ -20,7 +23,7 @@ const RecipeItem: React.FC<recipeItemProp> = ({recipe, onPressRecipeItem}) => {
         <Text style={styles.description}>{recipe.description}</Text>
         <Text style={styles.difficulty}>{recipe.difficulty}</Text>
       </View>
-      <TouchableOpacity style={styles.btn}>
+      <TouchableOpacity style={styles.btn} onPress={()=>deleteSingleRecipe(recipe._id)}>
         <View style={styles.dltBtn}>
           <Text style={styles.dltText}>🗑</Text>
         </View>
@@ -71,7 +74,9 @@ const styles = StyleSheet.create({
   dltBtn: {
     backgroundColor: 'rgba(2, 22, 48, 0.97)',
     padding: 10,
+    position:"absolute",
     borderRadius: 35,
+    marginRight:30,
   },
   dltText: {
     color: 'white',

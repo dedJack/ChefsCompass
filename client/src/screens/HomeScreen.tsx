@@ -64,33 +64,31 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
   }, []);
 
   return (
-    
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TextInput
-            style={styles.searchText}
-            placeholder="Search recipes...."
-            value={searchRecipe}
-            onChangeText={setSearchRecipe}
-          />
-          <TouchableOpacity style={styles.addMenu}>
-            <Text
-              style={styles.addMenuText}
-              onPress={() => {
-                setShowModel(!showModel);
-              }}>
-              +
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btn} onPress={handleLogout}>
-            <Text style={styles.btnText}>Logout</Text>
-          </TouchableOpacity>
-        </View>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TextInput
+          style={styles.searchText}
+          placeholder="Search recipes...."
+          value={searchRecipe}
+          onChangeText={setSearchRecipe}
+        />
+        <TouchableOpacity
+          style={styles.addMenu}
+          onPress={() => {
+            setShowModel(!showModel);
+          }}>
+          <Text style={styles.addMenuText}>+</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.btn} onPress={handleLogout}>
+          <Text style={styles.btnText}>Logout</Text>
+        </TouchableOpacity>
+      </View>
 
-        {/* Render all recipe Item */}
+      {/* Render all recipe Item */}
+      {recipes.length > 0 ? (
         <FlatList
           data={recipes}
-          contentContainerStyle={{ paddingBottom: 100 }}
+          contentContainerStyle={{paddingBottom: 100}}
           renderItem={({item}) => (
             <RecipeItem
               recipe={item}
@@ -100,26 +98,28 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
             />
           )}
         />
+      ) : (
+        <Text style={styles.mainText}>Nothing to display</Text>
+      )}
 
-        {/* Modal for creating new recipe */}
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={showModel}
-          onRequestClose={() => setShowModel(false)}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <CreateRecipeForm
-                onCancle={() => {
-                  setShowModel(false);
-                }}
-                onSubmit={handleCreateRecipeSubmit}
-              />
-            </View>
+      {/* Modal for creating new recipe */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showModel}
+        onRequestClose={() => setShowModel(false)}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <CreateRecipeForm
+              onCancle={() => {
+                setShowModel(false);
+              }}
+              onSubmit={handleCreateRecipeSubmit}
+            />
           </View>
-        </Modal>
-      </View>
-    
+        </View>
+      </Modal>
+    </View>
   );
 };
 
@@ -176,6 +176,11 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     marginHorizontal: 15,
+  },
+  mainText: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 export default HomeScreen;
