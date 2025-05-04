@@ -1,19 +1,13 @@
 import React, {useContext, useState} from 'react';
-import {
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Recipe} from '../context/RecipeContext';
+import {FavouriteContext} from '../context/FavouriteContext';
 
 interface recipeItemProp {
   recipe: Recipe;
-  onPressRecipeItem: () => void;
-  currentUserId: string | null;
-  deleteSingleRecipe: () => void;
+  onPressRecipeItem?: () => void;
+  currentUserId?: string | null;
+  deleteSingleRecipe?: () => void;
 }
 const RecipeItem: React.FC<recipeItemProp> = ({
   recipe,
@@ -21,14 +15,35 @@ const RecipeItem: React.FC<recipeItemProp> = ({
   currentUserId,
   deleteSingleRecipe,
 }) => {
+  // const [favorite, setFavorite] = useState(false);
+  const {toggleFavourites, favorite} = useContext(FavouriteContext);
+
+  const handleFavoritePress = () => {
+    toggleFavourites(recipe._id);
+    // setFavorite(!favorite)
+  };
   return (
     <TouchableOpacity style={styles.card} onPress={onPressRecipeItem}>
       <View style={styles.cardContent}>
         <Text style={styles.title}>{recipe.title}</Text>
         <Text style={styles.description}>{recipe.description}</Text>
-        <Text style={styles.difficulty}>{recipe.difficulty}</Text>
+        <View style={styles.difficultyContainer}>
+          <Text style={styles.difficulty}>{recipe.difficulty}</Text>
+        </View>
       </View>
 
+      {/* Show favourites to the user */}
+      {currentUserId && recipe.createdBy !== currentUserId && (
+        <TouchableOpacity onPress={handleFavoritePress}>
+          {favorite[recipe._id] ? (
+            <Text style={[styles.favourites,{fontSize:17}]}>❤️</Text>
+          ) : (
+            <Text style={styles.favourites}>♡</Text>
+          )}
+        </TouchableOpacity>
+      )}
+
+      {/* Show delete btn to recipe owner */}
       {currentUserId && recipe.createdBy === currentUserId && (
         <TouchableOpacity style={styles.btn} onPress={deleteSingleRecipe}>
           <View style={styles.dltBtn}>
@@ -70,11 +85,20 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     marginBottom: 4,
+    paddingRight: 35,
     color: '#333',
   },
+  difficultyContainer: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    marginVertical: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
   difficulty: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 12,
+    color: '#555',
   },
   btn: {
     alignItems: 'center',
@@ -88,6 +112,11 @@ const styles = StyleSheet.create({
   },
   dltText: {
     color: 'white',
+    fontSize: 25,
+  },
+  favourites: {
+    position: 'absolute',
+    right: 10,
     fontSize: 25,
   },
 });
