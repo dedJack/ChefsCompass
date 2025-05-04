@@ -18,7 +18,7 @@ interface RecepieContextData {
   ) => Promise<void>;
   fetchRecipe: () => Promise<void>;
   fetchSingleRecipe: (id: string) => Promise<Recipe | null>;
-  deleteSingleRecipe: (id: string) => Promise<void>;
+  handleSingleRecipeDelete: (id: string) => Promise<void>;
 }
 
 export const RecipeContext = createContext<RecepieContextData>(
@@ -93,7 +93,7 @@ export const RecipeProvider: React.FC<{children: ReactNode}> = ({children}) => {
   };
 
   //fetch and delete recipe by Id.
-  const deleteSingleRecipe = async (id: string): Promise<void> => {
+  const handleSingleRecipeDelete = async (id: string): Promise<void> => {
     try {
       const result = await axios.delete(
         `${API_URL}/api/recipe/get-recipes/${id}`,
@@ -138,7 +138,7 @@ export const RecipeProvider: React.FC<{children: ReactNode}> = ({children}) => {
         createRecipe,
         fetchRecipe,
         fetchSingleRecipe,
-        deleteSingleRecipe,
+        handleSingleRecipeDelete,
       }}>
       {children}
     </RecipeContext.Provider>

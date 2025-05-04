@@ -1,6 +1,5 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import React, {useContext, useEffect} from 'react';
-import {Text, View} from 'react-native';
 import HomeScreen from '../screens/HomeScreen';
 import RecipeDetails from '../screens/RecipeDetails';
 import SignupScreen from '../screens/SignupScreen';
@@ -11,15 +10,17 @@ import {
 } from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../context/AuthContext';
+import TabNavigation from './TabNavigation';
 
 export type RootStackScreenTypeProp = {
   Login: undefined;
   Signup: undefined;
-  HomeScreen: undefined;
+  TabNavigator: undefined;
   RecipeDetail: {recipeId: string};
 };
 
 const Stack = createNativeStackNavigator<RootStackScreenTypeProp>();
+
 type RootNavigationProp = NativeStackNavigationProp<RootStackScreenTypeProp>;
 
 const RootNavigation: React.FC = () => {
@@ -33,7 +34,7 @@ const RootNavigation: React.FC = () => {
       if (isAuthenticated) {
         navigation.reset({
           index: 0,
-          routes: [{name: 'HomeScreen'}],
+          routes: [{name: 'TabNavigator'}],
         });
       } else {
         navigation.reset({
@@ -46,11 +47,6 @@ const RootNavigation: React.FC = () => {
 
   return (
     <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen
-        name="HomeScreen"
-        options={{headerShown: false}}
-        component={HomeScreen}
-      />
       <Stack.Screen
         name="Login"
         options={{headerShown: false}}
@@ -65,6 +61,11 @@ const RootNavigation: React.FC = () => {
         name="RecipeDetail"
         options={{headerShown: false}}
         component={RecipeDetails}
+      />
+      <Stack.Screen
+        name="TabNavigator"
+        options={{headerShown: false}}
+        component={TabNavigation}
       />
     </Stack.Navigator>
   );

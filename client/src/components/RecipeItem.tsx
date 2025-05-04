@@ -1,21 +1,26 @@
-import React, { useContext } from 'react';
+import React, {useContext, useState} from 'react';
 import {
+  Modal,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Recipe, RecipeContext} from '../context/RecipeContext';
+import {Recipe} from '../context/RecipeContext';
 
 interface recipeItemProp {
   recipe: Recipe;
-  onPressRecipeItem: ()=>void
+  onPressRecipeItem: () => void;
+  currentUserId: string | null;
+  deleteSingleRecipe: () => void;
 }
-const RecipeItem: React.FC<recipeItemProp> = ({recipe, onPressRecipeItem}) => {
-
-  const {deleteSingleRecipe} = useContext(RecipeContext);
-
+const RecipeItem: React.FC<recipeItemProp> = ({
+  recipe,
+  onPressRecipeItem,
+  currentUserId,
+  deleteSingleRecipe,
+}) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPressRecipeItem}>
       <View style={styles.cardContent}>
@@ -23,11 +28,14 @@ const RecipeItem: React.FC<recipeItemProp> = ({recipe, onPressRecipeItem}) => {
         <Text style={styles.description}>{recipe.description}</Text>
         <Text style={styles.difficulty}>{recipe.difficulty}</Text>
       </View>
-      <TouchableOpacity style={styles.btn} onPress={()=>deleteSingleRecipe(recipe._id)}>
-        <View style={styles.dltBtn}>
-          <Text style={styles.dltText}>🗑</Text>
-        </View>
-      </TouchableOpacity>
+
+      {currentUserId && recipe.createdBy === currentUserId && (
+        <TouchableOpacity style={styles.btn} onPress={deleteSingleRecipe}>
+          <View style={styles.dltBtn}>
+            <Text style={styles.dltText}>🗑</Text>
+          </View>
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 };
@@ -74,9 +82,9 @@ const styles = StyleSheet.create({
   dltBtn: {
     backgroundColor: 'rgba(2, 22, 48, 0.97)',
     padding: 10,
-    position:"absolute",
+    position: 'absolute',
     borderRadius: 35,
-    marginRight:30,
+    marginRight: 30,
   },
   dltText: {
     color: 'white',

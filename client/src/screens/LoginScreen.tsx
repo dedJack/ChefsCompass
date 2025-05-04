@@ -10,10 +10,13 @@ import {
 } from 'react-native';
 import {RootStackScreenTypeProp} from '../navigation/RootNavigation';
 import {AuthContext} from '../context/AuthContext';
+import {CompositeNavigationProp} from '@react-navigation/native';
+import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
+import {BottomTabScreenTypeProp} from '../navigation/TabNavigation';
 
-export type LoginScreenNavigationProp = NativeStackNavigationProp<
-  RootStackScreenTypeProp,
-  'Login'
+export type LoginScreenNavigationProp = CompositeNavigationProp<
+  NativeStackNavigationProp<RootStackScreenTypeProp, 'Login'>,
+  BottomTabNavigationProp<BottomTabScreenTypeProp>
 >;
 
 interface loginScreenProp {
@@ -30,7 +33,7 @@ const LoginScreen: React.FC<loginScreenProp> = ({navigation}) => {
       const success = await signIn(email, password);
       if (success) {
         navigation.navigate('HomeScreen');
-      }else{
+      } else {
         Alert.alert('Login failed, Please try again.');
       }
     } else {
