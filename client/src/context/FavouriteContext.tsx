@@ -35,7 +35,6 @@ export const FavouriteProvider: React.FC<{children: ReactNode}> = ({
             
         }
     }
-    console.log(favorite)
     loadFavorite();
   },[])
 
@@ -56,7 +55,6 @@ export const FavouriteProvider: React.FC<{children: ReactNode}> = ({
       ...prev,
       [id]: !prev[id],
     }));
-    // console.log(favorite)
   };
   return (
     <FavouriteContext.Provider value={{favorite, toggleFavourites}}>

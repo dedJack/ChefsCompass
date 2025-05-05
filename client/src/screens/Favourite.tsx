@@ -1,4 +1,3 @@
-// FavoritesScreen.js
 import React, {useContext} from 'react';
 import {View, FlatList, Text} from 'react-native';
 import {FavouriteContext} from '../context/FavouriteContext';
@@ -25,27 +24,25 @@ const FavoritesScreen: React.FC<FavoriteScreenProp> = ({navigation}) => {
   const {recipes} = useContext(RecipeContext);
   const {userId} = useContext(AuthContext);
 
-  const favoriteRecipes = recipes.filter(recipe => favorite[recipe._id]);
-  const userRecipes = recipes.filter(
-    recipeItem => userId !== recipeItem.createdBy,
+  const filteredFavorites = recipes.filter(
+    recipe =>
+      favorite[recipe._id] && // user marked it as favorite
+      recipe.createdBy !== userId // but the user didn't create it
   );
-
+  
   return (
     <View style={{flex: 1}}>
-      {favoriteRecipes.length > 0 ? (
+      {filteredFavorites.length > 0 ? (
         <FlatList
-          data={favoriteRecipes}
+          data={filteredFavorites}
           renderItem={({item}) => (
             <RecipeItem
               recipe={item}
               onPressRecipeItem={() =>
                 navigation.navigate('RecipeDetail', {recipeId: item._id})
               }
-              // currentUserId={currentUserId}
-              // deleteSingleRecipe={() => handleDeleteRecipe(item._id)}
-            />
+              />
           )}
-        //   keyExtractor={item => item._id}
           contentContainerStyle={{paddingBottom: 20}} // Add some bottom padding
         />
       ) : (

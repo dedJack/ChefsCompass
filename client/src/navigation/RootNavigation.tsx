@@ -10,12 +10,14 @@ import {
 } from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../context/AuthContext';
-import TabNavigation from './TabNavigation';
+import TabNavigation, { BottomTabScreenTypeProp } from './TabNavigation';
 
 export type RootStackScreenTypeProp = {
   Login: undefined;
   Signup: undefined;
-  TabNavigator: undefined;
+  TabNavigator: {
+    screen: keyof BottomTabScreenTypeProp;
+  };
   RecipeDetail: {recipeId: string};
 };
 

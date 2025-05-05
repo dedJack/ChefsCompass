@@ -20,7 +20,6 @@ const RecipeItem: React.FC<recipeItemProp> = ({
 
   const handleFavoritePress = () => {
     toggleFavourites(recipe._id);
-    // setFavorite(!favorite)
   };
   return (
     <TouchableOpacity style={styles.card} onPress={onPressRecipeItem}>
