@@ -5,6 +5,8 @@ export interface IRecipe extends Document{
     title:string,
     description:string,
     difficulty: 'Easy'|'Medium'|'Hard',
+    ingredients: string,
+    steps: string,
     createdBy: mongoose.Types.ObjectId
     createdAt: Date,
 }
@@ -22,6 +24,13 @@ const RecipeSchema = new Schema<IRecipe>({
         type:String,
         required:true,
         enum:['Easy','Medium','Hard']
+    },
+    ingredients:{
+        type:String,
+        required:true,
+    },
+    steps:{
+        type:String,
     },
     createdBy:{
         type:Schema.Types.ObjectId, ref:'User',required:true,

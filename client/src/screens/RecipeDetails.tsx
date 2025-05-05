@@ -32,6 +32,7 @@ const RecipeDetails: React.FC<RecipeDetailScreenProp> = ({route}) => {
       try {
         const fetchedRecipe = await fetchSingleRecipe(recipeId);
         setRecipeDetails(fetchedRecipe);
+        console.log('Recipe details ', fetchRecipe);
       } catch (e) {
         console.log('Failed to fetch recipe ', e);
       }
@@ -52,46 +53,48 @@ const RecipeDetails: React.FC<RecipeDetailScreenProp> = ({route}) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* {recipeDetails.imageUrl ? ( */}
+    <ScrollView contentContainerStyle={[styles.container,{marginBottom:30}]}>
+      {/* {recipeDetails.imageUrl ? (
       <Image
         source={require('../assests/chickenBiryani.jpeg')}
         style={styles.image}
         resizeMode="cover"
       />
-      {/* ) : null} */}
+      ) : null} */}
+
+      <Text style={styles.title}>{recipeDetails.title}</Text>
 
       <View style={styles.headerContainer}>
-        <Text style={styles.title}>{recipeDetails.title}</Text>
+        <Text style={styles.subTitle}>
+          Difficulty: {recipeDetails.difficulty}
+        </Text>
         {/* Show favourites to the user */}
         {userId && recipeDetails.createdBy !== userId && (
           <TouchableOpacity onPress={handleFavoritePress} style={styles.fvt}>
             {favorite[recipeDetails._id] ? (
-              <Text style={[{fontSize: 28}]}>❤️</Text>
+              <Text style={[{fontSize: 20}]}>❤️</Text>
             ) : (
               <Text style={[{fontSize: 28}]}>♡</Text>
             )}
           </TouchableOpacity>
         )}
       </View>
-      <Text style={styles.subTitle}>
-        Difficulty: {recipeDetails.difficulty}
-      </Text>
 
       <Text style={styles.sectionTitle}>Description</Text>
       <Text style={styles.paragraph}>{recipeDetails.description}</Text>
 
       <Text style={styles.sectionTitle}>Ingredients</Text>
       {/* {recipeDetails.ingredients?.map((item, index) => ( */}
-      <Text style={styles.listItem}>
-        {'onioin,\n  tomato, \n potato,\n ginger garlic'}
-      </Text>
+      <Text style={styles.listItem}>{recipeDetails.ingredients}</Text>
       {/* // ))} */}
 
       <Text style={styles.sectionTitle}>Steps</Text>
       {/* {recipeDetails.steps?.map((step, index) => ( */}
-      <Text style={styles.listItem}></Text>
+      <Text style={styles.listItem}>{recipeDetails.steps}</Text>
       {/* // ))} */}
+
+      <Text style={[{fontSize:20,fontWeight:"bold", marginVertical:10, textAlign:"center"}]}>Enjoy the meal!👍</Text>
+      <Text style={[{fontSize:20,fontWeight:"bold", marginVertical:10, textAlign:"center"}]}></Text>
     </ScrollView>
   );
 };
@@ -105,6 +108,7 @@ const styles = StyleSheet.create({
   container: {
     top: 50,
     padding: 20,
+    marginBottom:40,
     backgroundColor: '#fff',
   },
   image: {

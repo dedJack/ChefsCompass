@@ -25,13 +25,17 @@ const CreateRecipeForm: React.FC<CreateRecipeFormProps> = ({
   const [difficulty, setDifficulty] = useState<'Easy' | 'Medium' | 'Hard'>(
     'Easy',
   );
+  const [ingredients, setIngredients] = useState('');
+  const [steps, setSteps] = useState('');
 
   const handleCreateRecipe = async () => {
-    if (title && description) {
-      onSubmit({title, description, difficulty});
+    if (title && description && ingredients && steps) {
+      onSubmit({title, description, difficulty, ingredients, steps});
       setTitle('');
       setDescription('');
       setDifficulty('Easy');
+      setIngredients('');
+      setSteps('');
       onCancle();
     } else {
       Alert.alert('Invalid input', 'Please fill all the forms.');
@@ -40,95 +44,157 @@ const CreateRecipeForm: React.FC<CreateRecipeFormProps> = ({
 
   return (
     <View style={styles.container}>
-      <Text
-        style={[
-          {
-            fontSize: 25,
-            fontWeight: 'bold',
-            textAlign: 'center',
-            marginVertical: 10,
-          },
-        ]}>
-        Create new Recipe
-      </Text>
-      <TextInput
-        placeholder="Recipe title"
-        value={title}
-        onChangeText={setTitle}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Recipe description..."
-        value={description}
-        onChangeText={setDescription}
-        multiline={true}
-        style={[styles.input, styles.inputDescription]}
-      />
-      <Picker
-        style={styles.pickerContainer}
-        selectedValue={difficulty}
-        onValueChange={itemValue => {
-          setDifficulty(itemValue as 'Easy' | 'Medium' | 'Hard');
-        }}>
-        <Picker.Item label="Easy" value={'Easy'} />
-        <Picker.Item label="Medium" value={'Medium'} />
-        <Picker.Item label="Hard" value={'Hard'} />
-      </Picker>
-      <View style={styles.btnContainer}>
-        <TouchableOpacity
-          style={[styles.btn, {backgroundColor: 'lightgrey'}]}
-          onPress={onCancle}>
-          <Text style={styles.btnText}>cancle</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.btn, {backgroundColor: 'black'}]}
-          onPress={handleCreateRecipe}>
-          <Text style={[styles.btnText, {color: 'white'}]}>submit</Text>
-        </TouchableOpacity>
-      </View>
+    <Text style={styles.header}>🍽️ Create New Recipe</Text>
+  
+    {/* Optional Image Picker
+    <TouchableOpacity style={styles.imageUpload}>
+      <Text style={styles.imageUploadText}>+ Add Image</Text>
+    </TouchableOpacity> */}
+  
+    <TextInput
+      placeholder="Recipe Title"
+      value={title}
+      onChangeText={setTitle}
+      style={styles.input}
+      placeholderTextColor="#888"
+    />
+    <TextInput
+      placeholder="Short Description..."
+      value={description}
+      onChangeText={setDescription}
+      multiline={true}
+      style={[styles.input, styles.textArea]}
+      placeholderTextColor="#888"
+    />
+  
+    <Picker
+      style={styles.pickerContainer}
+      selectedValue={difficulty}
+      onValueChange={itemValue =>
+        setDifficulty(itemValue as 'Easy' | 'Medium' | 'Hard')
+      }>
+      <Picker.Item label="Easy" value="Easy" />
+      <Picker.Item label="Medium" value="Medium" />
+      <Picker.Item label="Hard" value="Hard" />
+    </Picker>
+  
+    <TextInput
+      placeholder="Ingredients (comma-separated)"
+      value={ingredients}
+      onChangeText={setIngredients}
+      multiline={true}
+      style={[styles.input, styles.textArea]}
+      placeholderTextColor="#888"
+    />
+    <TextInput
+      placeholder="Steps to Cook"
+      value={steps}
+      onChangeText={setSteps}
+      multiline={true}
+      style={[styles.input, styles.textArea]}
+      placeholderTextColor="#888"
+    />
+  
+    <View style={styles.btnContainer}>
+      <TouchableOpacity style={styles.cancelBtn} onPress={onCancle}>
+        <Text style={styles.cancelText}>Cancel</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.submitBtn} onPress={handleCreateRecipe}>
+        <Text style={styles.submitText}>Submit</Text>
+      </TouchableOpacity>
     </View>
+  </View>
+  
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    paddingVertical: 10,
-  },
-  input: {
-    fontSize: 15,
-    borderWidth: 0.5,
-    borderRadius: 15,
-    padding: 10,
-    paddingHorizontal: 20,
-    marginHorizontal: 15,
-    marginVertical: 8,
-    backgroundColor: 'white',
-  },
-  inputDescription: {
-    height: 100,
-    textAlignVertical: 'top',
-  },
-  pickerContainer: {
-    marginHorizontal: 13,
-  },
-  btnContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-  },
-  btn: {
-    flex: 1,
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginHorizontal: 15,
-    alignItems: 'center',
-  },
-  btnText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
+    container: {
+      padding: 20,
+      backgroundColor: 'rgb(2, 79, 107)',
+      borderRadius: 16,
+      margin: 16,
+      elevation: 5,
+      shadowColor: '#000',
+      shadowOpacity: 0.1,
+      shadowOffset: { width: 0, height: 2 },
+    },
+    header: {
+      fontSize: 28,
+      fontWeight: '700',
+      textAlign: 'center',
+      marginBottom: 20,
+      color: 'white',
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: '#ddd',
+      borderRadius: 12,
+      paddingHorizontal: 15,
+      paddingVertical: 12,
+      fontSize: 16,
+      marginBottom: 15,
+      backgroundColor: '#f9f9f9',
+      color: '#333',
+    },
+    textArea: {
+      minHeight: 80,
+      textAlignVertical: 'top',
+    },
+    pickerContainer: {
+      borderWidth: 1,
+      borderColor: '#ddd',
+      borderRadius: 15,
+      marginBottom: 15,
+      backgroundColor: '#f9f9f9',
+    },
+    btnContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 20,
+    },
+    cancelBtn: {
+      flex: 1,
+      backgroundColor: '#eee',
+      paddingVertical: 12,
+      marginRight: 10,
+      borderRadius: 12,
+    },
+    submitBtn: {
+      flex: 1,
+      backgroundColor: '#333',
+      paddingVertical: 12,
+      marginLeft: 10,
+      borderRadius: 12,
+    },
+    cancelText: {
+      color: '#333',
+      fontSize: 16,
+      fontWeight: '500',
+      textAlign: 'center',
+    },
+    submitText: {
+      color: '#fff',
+      fontSize: 16,
+      fontWeight: '600',
+      textAlign: 'center',
+    },
+    imageUpload: {
+      height: 160,
+      borderRadius: 12,
+      borderWidth: 2,
+      borderColor: '#ccc',
+      borderStyle: 'dashed',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 20,
+      backgroundColor: '#fafafa',
+    },
+    imageUploadText: {
+      color: '#999',
+      fontSize: 16,
+    },
+  
 });
 
 export default CreateRecipeForm;

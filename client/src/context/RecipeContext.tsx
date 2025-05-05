@@ -7,6 +7,8 @@ export interface Recipe {
   title: string;
   description: string;
   difficulty: 'Easy' | 'Medium' | 'Hard';
+  ingredients:string;
+  steps:string;
   createdBy: string;
   createdAt: string;
 }
@@ -44,6 +46,7 @@ export const RecipeProvider: React.FC<{children: ReactNode}> = ({children}) => {
           },
         },
       );
+      console.log(result.data)
       if (result.data.success) {
         const newRecipe = result.data.data;
         setRecipes(prevRecipe => [...prevRecipe, newRecipe]);
@@ -83,6 +86,7 @@ export const RecipeProvider: React.FC<{children: ReactNode}> = ({children}) => {
         },
       );
       if (result.data.success) {
+        console.log("fetch single recipe :",result.data)
         return result.data.data;
       }
       return null;

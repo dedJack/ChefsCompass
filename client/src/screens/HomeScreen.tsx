@@ -140,12 +140,11 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   header: {
-    backgroundColor: 'blue',
+    backgroundColor: 'rgb(2, 79, 107)',
     marginBottom: 1,
     flexDirection: 'row',
     paddingVertical: 15,
     paddingHorizontal: 8,
-    // justifyContent: 'center',
   },
   searchText: {
     flex: 1,
