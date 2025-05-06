@@ -2,6 +2,7 @@ import {Picker} from '@react-native-picker/picker';
 import React, {useState} from 'react';
 import {
   Alert,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -43,6 +44,7 @@ const CreateRecipeForm: React.FC<CreateRecipeFormProps> = ({
   };
 
   return (
+    <ScrollView contentContainerStyle={{marginBottom:20}}>
     <View style={styles.container}>
     <Text style={styles.header}>🍽️ Create New Recipe</Text>
   
@@ -104,7 +106,7 @@ const CreateRecipeForm: React.FC<CreateRecipeFormProps> = ({
       </TouchableOpacity>
     </View>
   </View>
-  
+  </ScrollView>
   );
 };
 

@@ -78,7 +78,7 @@ const RecipeItem: React.FC<recipeItemProp> = ({
             onPress={deleteSingleRecipe}
             style={styles.iconButton}>
             <View style={[styles.iconWrapper, styles.deleteWrapper]}>
-              <Text style={styles.deleteIcon}>🗑️</Text>
+              <Ionicons style={styles.deleteIcon} name={'trash'} color={'black'} />
             </View>
           </TouchableOpacity>
         )}
@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
   iconWrapper: {
     position: 'absolute',
     right: 0,
-    width: 32,
-    height: 32,
+    width: 35,
+    height: 35,
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
@@ -167,8 +167,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   deleteIcon: {
-    fontSize: 16,
-    color: '#FF4C4C',
+    fontSize: 25,
   },
 });
 
