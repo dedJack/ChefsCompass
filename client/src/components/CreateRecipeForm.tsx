@@ -29,7 +29,7 @@ const CreateRecipeForm: React.FC<CreateRecipeFormProps> = ({
   const [steps, setSteps] = useState('');
 
   const handleCreateRecipe = async () => {
-    if (title && description && ingredients && steps) {
+    if (title && description && ingredients) {
       onSubmit({title, description, difficulty, ingredients, steps});
       setTitle('');
       setDescription('');

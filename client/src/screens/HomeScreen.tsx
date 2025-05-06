@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  StatusBar,
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import CreateRecipeForm from '../components/CreateRecipeForm';
@@ -17,8 +18,7 @@ import {CompositeNavigationProp} from '@react-navigation/native';
 import {BottomTabScreenTypeProp} from '../navigation/TabNavigation';
 import {RootStackScreenTypeProp} from '../navigation/RootNavigation';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import { StackNavigationProp } from '@react-navigation/stack';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 type HomeScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<BottomTabScreenTypeProp, 'HomeScreen'>,
@@ -29,10 +29,12 @@ interface HomeScreenProp {
   navigation: HomeScreenNavigationProp;
 }
 const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
-  const {signOut, userId} = useContext(AuthContext);
+  //contexts
+  const {signOut, userId, token, getUser} = useContext(AuthContext);
   const {createRecipe, recipes, fetchRecipe, handleSingleRecipeDelete} =
     useContext(RecipeContext);
 
+  //useState
   const [searchRecipe, setSearchRecipe] = useState('');
   const [showModel, setShowModel] = useState(false);
 
@@ -68,12 +70,22 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
 
   //continue render the recipe data to show updated data
   useEffect(() => {
-    // fetchRecipeById();
-    fetchRecipe();
+    if (!token) {
+      navigation.navigate('Login');
+      return;
+    }
+
+    try {
+      getUser();
+      fetchRecipe();
+    } catch (e) {
+      navigation.navigate('Login');
+    }
   }, []);
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
         <TextInput
           style={styles.searchText}
@@ -97,7 +109,7 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
       {recipes.length > 0 ? (
         <FlatList
           data={filterRecipes}
-          contentContainerStyle={{paddingBottom: 100}}
+          contentContainerStyle={{paddingBottom: 20}}
           renderItem={({item}) => (
             <RecipeItem
               recipe={item}
@@ -108,6 +120,7 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
               deleteSingleRecipe={() => handleSingleRecipeDelete(item._id)}
             />
           )}
+          keyExtractor={item => item._id}
         />
       ) : (
         <Text style={styles.mainText}>Nothing to display</Text>
@@ -136,10 +149,11 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    top: 45,
-    marginBottom: 40,
+    flex: 1,
+    marginBottom: 10,
   },
   header: {
+    paddingTop: StatusBar.currentHeight,
     backgroundColor: 'rgb(2, 79, 107)',
     marginBottom: 1,
     flexDirection: 'row',

@@ -7,6 +7,7 @@ import {
   Image,
   ActivityIndicator,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 import {Recipe, RecipeContext} from '../context/RecipeContext';
 import {RouteProp} from '@react-navigation/native';
@@ -53,48 +54,39 @@ const RecipeDetails: React.FC<RecipeDetailScreenProp> = ({route}) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={[styles.container,{marginBottom:30}]}>
-      {/* {recipeDetails.imageUrl ? (
-      <Image
-        source={require('../assests/chickenBiryani.jpeg')}
-        style={styles.image}
-        resizeMode="cover"
-      />
-      ) : null} */}
+    <ScrollView contentContainerStyle={{padding: 16, paddingBottom: 60,top: StatusBar.currentHeight,
+    }}>
+      <View style={styles.card}>
+        <Text style={styles.title}>{recipeDetails.title}</Text>
 
-      <Text style={styles.title}>{recipeDetails.title}</Text>
+        <View style={styles.headerContainer}>
+          <Text style={styles.subTitle}>
+            Difficulty: {recipeDetails.difficulty}
+          </Text>
+          {userId && recipeDetails.createdBy !== userId && (
+            <TouchableOpacity
+              onPress={handleFavoritePress}
+              style={styles.favorite}>
+              {favorite[recipeDetails._id] ? (
+                <Text style={{fontSize: 20}}>❤️</Text>
+              ) : (
+                <Text style={{fontSize: 28}}>♡</Text>
+              )}
+            </TouchableOpacity>
+          )}
+        </View>
 
-      <View style={styles.headerContainer}>
-        <Text style={styles.subTitle}>
-          Difficulty: {recipeDetails.difficulty}
-        </Text>
-        {/* Show favourites to the user */}
-        {userId && recipeDetails.createdBy !== userId && (
-          <TouchableOpacity onPress={handleFavoritePress} style={styles.fvt}>
-            {favorite[recipeDetails._id] ? (
-              <Text style={[{fontSize: 20}]}>❤️</Text>
-            ) : (
-              <Text style={[{fontSize: 28}]}>♡</Text>
-            )}
-          </TouchableOpacity>
-        )}
+        <Text style={styles.sectionTitle}>Description</Text>
+        <Text style={styles.paragraph}>{recipeDetails.description}</Text>
+
+        <Text style={styles.sectionTitle}>Ingredients</Text>
+        <Text style={styles.listItem}>{recipeDetails.ingredients}</Text>
+
+        <Text style={styles.sectionTitle}>Steps</Text>
+        <Text style={styles.listItem}>{recipeDetails.steps}</Text>
+
+        <Text style={styles.footer}>Enjoy the meal! 👍</Text>
       </View>
-
-      <Text style={styles.sectionTitle}>Description</Text>
-      <Text style={styles.paragraph}>{recipeDetails.description}</Text>
-
-      <Text style={styles.sectionTitle}>Ingredients</Text>
-      {/* {recipeDetails.ingredients?.map((item, index) => ( */}
-      <Text style={styles.listItem}>{recipeDetails.ingredients}</Text>
-      {/* // ))} */}
-
-      <Text style={styles.sectionTitle}>Steps</Text>
-      {/* {recipeDetails.steps?.map((step, index) => ( */}
-      <Text style={styles.listItem}>{recipeDetails.steps}</Text>
-      {/* // ))} */}
-
-      <Text style={[{fontSize:20,fontWeight:"bold", marginVertical:10, textAlign:"center"}]}>Enjoy the meal!👍</Text>
-      <Text style={[{fontSize:20,fontWeight:"bold", marginVertical:10, textAlign:"center"}]}></Text>
     </ScrollView>
   );
 };
@@ -105,12 +97,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  container: {
-    top: 50,
-    padding: 20,
-    marginBottom:40,
-    backgroundColor: '#fff',
+  card: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    marginBottom:15,
+    padding: 16,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
+
+  footer: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginVertical: 20,
+    textAlign: 'center',
+  },
+
   image: {
     width: '100%',
     height: 300,
@@ -126,8 +131,6 @@ const styles = StyleSheet.create({
   subTitle: {
     fontSize: 16,
     color: '#666',
-    textAlign: 'center',
-    marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 20,
@@ -146,10 +149,14 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginBottom: 6,
   },
-  fvt: {},
+  favorite: {
+    justifyContent: 'center',
+    marginBottom: 5,
+  },
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginHorizontal: 10,
   },
 });

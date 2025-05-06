@@ -11,6 +11,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {AuthContext} from '../context/AuthContext';
 import TabNavigation, { BottomTabScreenTypeProp } from './TabNavigation';
+import { StatusBar } from 'react-native';
 
 export type RootStackScreenTypeProp = {
   Login: undefined;
