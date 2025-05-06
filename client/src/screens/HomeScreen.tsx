@@ -75,12 +75,20 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
       return;
     }
 
-    try {
-      getUser();
-      fetchRecipe();
-    } catch (e) {
-      navigation.navigate('Login');
-    }
+    const validateAndFetch = async () => {
+      try {
+        const validToken = await getUser();
+        if (!validToken) {
+          navigation.navigate('Login');
+        } else {
+          fetchRecipe();
+        }
+      } catch (e) {
+        navigation.navigate('Login');
+      }
+    };
+
+    validateAndFetch();
   }, []);
 
   return (

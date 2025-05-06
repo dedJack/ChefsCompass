@@ -134,7 +134,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
         },
       });
 
-      if (validToken) {
+      if (validToken.data.success) {
         return true;
       }else{
         return false;
