@@ -17,6 +17,7 @@ interface AuthContextData {
   ) => Promise<boolean>;
   signIn: (email: string, password: string) => Promise<boolean>;
   signOut: () => Promise<void>;
+  getUser: () => Promise<boolean>;
 }
 
 //create context.
@@ -55,6 +56,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
     checkAuth();
   }, []);
 
+  //register
   const signUp = async (
     username: string,
     email: string,
@@ -81,6 +83,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
+  //login
   const signIn = async (email: string, password: string): Promise<boolean> => {
     try {
       const result = await axios.post(`${API_URL}/api/auth/login`, {
@@ -109,6 +112,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
+  //logout
   const signOut = async (): Promise<void> => {
     try {
       await AsyncStorage.removeItem('token');
@@ -121,6 +125,25 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
     }
   };
 
+  //validate token
+  const getUser = async (): Promise<boolean> => {
+    try {
+      const validToken = await axios.get(`${API_URL}/api/auth/get-user`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (validToken) {
+        return true;
+      }else{
+        return false;
+      }
+    } catch (e) {
+      console.log('Token expired, login again! ', e);
+      return false;
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -131,6 +154,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
         signIn,
         signOut,
         signUp,
+        getUser,
       }}>
       {children}
     </AuthContext.Provider>

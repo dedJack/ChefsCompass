@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import User from "../models/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { authMiddleware, AuthRequest } from "../middleware/authMiddleware";
 
 const router = express.Router();
 router.post("/register", async (req: Request, res: Response) => {
@@ -54,8 +55,17 @@ router.post("/login", async (req: Request, res: Response) => {
     res.status(200).json({ success: true, token, userId: currentUser._id, message: "Login successful" });
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ success: false ,message: "Internal server error" });
   }
 });
+
+//route 4: Get user by verifying token,
+router.get('/get-user',authMiddleware,async(req: AuthRequest, res:Response )=>{
+  try {
+    res.status(200).json({success:true, message:'Token is valid.'})
+  } catch (e) {
+    res.status(500).json({success:false, message:'internal server error'})
+  }
+})
 
 export default router;
