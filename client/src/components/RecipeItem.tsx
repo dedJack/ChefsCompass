@@ -2,6 +2,8 @@ import React, {useContext, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {Recipe} from '../context/RecipeContext';
 import {FavouriteContext} from '../context/FavouriteContext';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 
 interface recipeItemProp {
   recipe: Recipe;
@@ -62,9 +64,9 @@ const RecipeItem: React.FC<recipeItemProp> = ({
                 favorite[recipe._id] && styles.favoriteActive,
               ]}>
               {favorite[recipe._id] ? (
-                <Text style={styles.favoriteIcon}>❤️</Text>
+                <Ionicons style={styles.favoriteIcon} name={'heart'} color={'red'} />
               ) : (
-                <Text style={[styles.favoriteIcon, {fontSize: 22}]}>♡</Text>
+                <Ionicons style={styles.favoriteIcon} name={'heart-outline'} color={'black'} />
               )}
             </View>
           </TouchableOpacity>
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF0F0',
   },
   favoriteIcon: {
-    fontSize: 16,
+    fontSize: 20,
   },
   deleteIcon: {
     fontSize: 16,

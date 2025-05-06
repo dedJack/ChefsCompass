@@ -14,6 +14,8 @@ import {RouteProp} from '@react-navigation/native';
 import {RootStackScreenTypeProp} from '../navigation/RootNavigation';
 import {AuthContext} from '../context/AuthContext';
 import {FavouriteContext} from '../context/FavouriteContext';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 
 type RecipeDetailRouteType = RouteProp<RootStackScreenTypeProp, 'RecipeDetail'>;
 
@@ -54,8 +56,12 @@ const RecipeDetails: React.FC<RecipeDetailScreenProp> = ({route}) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={{padding: 16, paddingBottom: 60,top: StatusBar.currentHeight,
-    }}>
+    <ScrollView
+      contentContainerStyle={{
+        padding: 16,
+        paddingBottom: 60,
+        top: StatusBar.currentHeight,
+      }}>
       <View style={styles.card}>
         <Text style={styles.title}>{recipeDetails.title}</Text>
 
@@ -66,11 +72,19 @@ const RecipeDetails: React.FC<RecipeDetailScreenProp> = ({route}) => {
           {userId && recipeDetails.createdBy !== userId && (
             <TouchableOpacity
               onPress={handleFavoritePress}
-              style={styles.favorite}>
+              >
               {favorite[recipeDetails._id] ? (
-                <Text style={{fontSize: 20}}>❤️</Text>
+                <Ionicons
+                  style={styles.favoriteIcon}
+                  name={'heart'}
+                  color={'red'}
+                />
               ) : (
-                <Text style={{fontSize: 28}}>♡</Text>
+                <Ionicons
+                  style={styles.favoriteIcon}
+                  name={'heart-outline'}
+                  color={'black'}
+                />
               )}
             </TouchableOpacity>
           )}
@@ -100,7 +114,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
     borderRadius: 16,
-    marginBottom:15,
+    marginBottom: 15,
     padding: 16,
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
@@ -149,9 +163,8 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     marginBottom: 6,
   },
-  favorite: {
-    justifyContent: 'center',
-    marginBottom: 5,
+  favoriteIcon:{
+    fontSize:25,
   },
   headerContainer: {
     flexDirection: 'row',
