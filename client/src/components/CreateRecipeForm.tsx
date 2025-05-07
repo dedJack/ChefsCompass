@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
       textAlignVertical: 'top',
     },
     pickerContainer: {
+      color:"#333",
       borderWidth: 1,
       borderColor: '#ddd',
       borderRadius: 15,

@@ -48,38 +48,44 @@ const SignupScreen: React.FC<SignupScreenProp> = ({navigation}) => {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Sign Up</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="username"
-        keyboardType="default"
-        autoCapitalize="none"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.btn} onPress={handleSingup}>
-        <Text style={styles.btnText}>Sign Up</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.linkText}>Already have an account. Login</Text>
-      </TouchableOpacity>
-
-      <Text></Text>
+      <View style={styles.card}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.header}>Sign up</Text>
+          <View style={styles.titleUnderline} />
+        </View>
+        <TextInput
+          style={styles.input}
+          placeholder="username"
+          placeholderTextColor={'black'}
+          keyboardType="default"
+          autoCapitalize="none"
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+          placeholderTextColor={'black'}
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholderTextColor={'black'}
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <TouchableOpacity style={styles.btn} onPress={handleSingup}>
+          <Text style={styles.btnText}>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.linkText}>Already have an account. Login</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -90,18 +96,45 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 20,
-    marginVertical: 10,
+    backgroundColor:"rgb(2, 79, 107)",
+  },
+  card: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    paddingHorizontal: 20,
+    paddingVertical: 15, // Adds vertical spacing for better content padding
+    backgroundColor: '#fff', // Ensures shadow is visible (required on iOS)
+    borderRadius: 20,
+    shadowColor: 'rgba(13, 14, 14, 0.97)', // Slightly softer shadow tone
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 5, // iOS-specific shadow blur
+    elevation: 10, // Android shadow
+  },
+  headerContainer: {
+    marginBottom: 8,
   },
   header: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    marginBottom: 10,
+    fontSize: 30,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginBottom: 4,
+  },
+  titleUnderline: {
+    height: 2,
+    width: 65,
+    backgroundColor: '#FF6B6B',
+    borderRadius: 2,
   },
   input: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.5,
+    borderBottomWidth: 0.9,
     borderRadius: 7,
     borderColor: 'lightgrey',
     paddingTop: 10,
@@ -115,13 +148,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 15,
     borderRadius: 7,
-    backgroundColor: 'lightblue',
+    backgroundColor: 'rgb(2, 79, 107)',
     paddingHorizontal: 15,
     paddingVertical: 8,
   },
   btnText: {
     fontSize: 15,
     fontWeight: 'bold',
+    color: 'white',
   },
   linkText: {
     marginVertical: 8,

@@ -1,11 +1,11 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import React from 'react';
 import MyRecipe from '../screens/MyRecipe';
 import HomeScreen from '../screens/HomeScreen';
 import Favourite from '../screens/Favourite';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 export type BottomTabScreenTypeProp = {
   MyRecipe: undefined;
   HomeScreen: undefined;
@@ -33,21 +33,23 @@ const TabNavigation: React.FC = () => {
       iconName = 'help-circle-outline'; // fallback icon
     }
 
-    return <Ionicons name={iconName} size={size} color={color} />;
+    return (
+      <Ionicons name={iconName} size={size} color={color} />
+    );
   };
 
   const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        tabBarShowLabel: true,
+        tabBarShowLabel:false,
         tabBarIcon: ({focused, color, size}) =>
           getTabBarIcon(route.name, focused, color, size),
         tabBarStyle: {
-          position: 'absolute', marginBottom: Platform.OS === 'ios' ? insets.bottom + 10 : 15,
-          marginHorizontal:8,
-         
-          paddingVertical: 15,
+          // position: 'absolute',
+          marginBottom: Platform.OS === 'ios' ? insets.bottom + 10 : 15,
+          marginHorizontal: 8,
+          paddingTop:10,
           borderRadius: 15,
           backgroundColor: 'rgb(2, 79, 107)',
           shadowOffset: {
@@ -58,16 +60,24 @@ const TabNavigation: React.FC = () => {
           shadowRadius: 4,
           elevation: 5,
         },
-        tabBarActiveTintColor:'#ee5bc4',
-        tabBarInactiveTintColor:'white'
+        tabBarActiveTintColor: '#ee5bc4',
+        tabBarInactiveTintColor: 'white',
       })}>
       <Tab.Screen
         name="HomeScreen"
         options={{headerShown: false, tabBarLabel: 'Home'}}
         component={HomeScreen}
       />
-      <Tab.Screen name="MyRecipe" options={{ tabBarLabel: 'My Recipe', title:"Chef's Collection"}} component={MyRecipe} />
-      <Tab.Screen name="Favourites" options={{title:"My Shortlist"}} component={Favourite} />
+      <Tab.Screen
+        name="MyRecipe"
+        options={{ title: "Chef's Collection"}}
+        component={MyRecipe}
+      />
+      <Tab.Screen
+        name="Favourites"
+        options={{title: 'My Shortlist'}}
+        component={Favourite}
+      />
     </Tab.Navigator>
   );
 };
