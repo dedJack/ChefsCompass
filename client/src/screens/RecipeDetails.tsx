@@ -28,14 +28,19 @@ const RecipeDetails: React.FC<RecipeDetailScreenProp> = ({route}) => {
   const {recipeId} = route.params;
   const {fetchSingleRecipe} = useContext(RecipeContext);
   const {userId} = useContext(AuthContext);
-  const {favorite, toggleFavourites} = useContext(FavouriteContext);
+  const context = useContext(FavouriteContext);
+  
+  if (!context) {
+    throw new Error('FavouriteContext is not available');
+  }
+  const {toggleFavourite, isFavourite} = context;
 
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
         const fetchedRecipe = await fetchSingleRecipe(recipeId);
         setRecipeDetails(fetchedRecipe);
-        console.log('Recipe details ', fetchRecipe);
+        // console.log('Recipe details ', fetchRecipe);
       } catch (e) {
         console.log('Failed to fetch recipe ', e);
       }
@@ -52,7 +57,7 @@ const RecipeDetails: React.FC<RecipeDetailScreenProp> = ({route}) => {
   }
 
   const handleFavoritePress = () => {
-    toggleFavourites(recipeDetails._id);
+    toggleFavourite(recipeDetails._id);
   };
 
   return (
@@ -73,7 +78,7 @@ const RecipeDetails: React.FC<RecipeDetailScreenProp> = ({route}) => {
             <TouchableOpacity
               onPress={handleFavoritePress}
               >
-              {favorite[recipeDetails._id] ? (
+              {isFavourite(recipeDetails._id) ? (
                 <Ionicons
                   style={styles.favoriteIcon}
                   name={'heart'}

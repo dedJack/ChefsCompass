@@ -8,7 +8,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  StatusBar,
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import CreateRecipeForm from '../components/CreateRecipeForm';
@@ -19,6 +18,7 @@ import {BottomTabScreenTypeProp} from '../navigation/TabNavigation';
 import {RootStackScreenTypeProp} from '../navigation/RootNavigation';
 import {BottomTabNavigationProp} from '@react-navigation/bottom-tabs';
 import {StackNavigationProp} from '@react-navigation/stack';
+import { StatusBar } from 'react-native';
 
 type HomeScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<BottomTabScreenTypeProp, 'HomeScreen'>,
@@ -93,6 +93,10 @@ const HomeScreen: React.FC<HomeScreenProp> = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+        backgroundColor="#024f6b" // Android background color
+        barStyle="dark-content" // "light-content" or "dark-content"
+      />
       <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
         <TextInput
@@ -161,7 +165,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   header: {
-    paddingTop: StatusBar.currentHeight,
+    paddingTop:StatusBar.currentHeight,
     backgroundColor: 'rgb(2, 79, 107)',
     marginBottom: 1,
     flexDirection: 'row',

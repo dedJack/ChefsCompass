@@ -1,6 +1,7 @@
 import axios from 'axios';
-import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
-import {API_URL, AuthContext} from './AuthContext';
+import {createContext, ReactNode, useContext, useState} from 'react';
+import { AuthContext} from './AuthContext';
+import { API_URL } from '@env';
 
 export interface Recipe {
   _id: string;

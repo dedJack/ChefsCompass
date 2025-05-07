@@ -4,7 +4,6 @@ import {Recipe} from '../context/RecipeContext';
 import {FavouriteContext} from '../context/FavouriteContext';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
 interface recipeItemProp {
   recipe: Recipe;
   onPressRecipeItem?: () => void;
@@ -20,11 +19,16 @@ const RecipeItem: React.FC<recipeItemProp> = ({
   currentUserId,
   deleteSingleRecipe,
 }) => {
-  // const [favorite, setFavorite] = useState(false);
-  const {toggleFavourites, favorite} = useContext(FavouriteContext);
+
+  //context
+  const context = useContext(FavouriteContext);
+  if (!context) {
+    throw new Error('FavouriteContext is not available');
+  }
+  const { toggleFavourite, isFavourite } = context;
 
   const handleFavoritePress = () => {
-    toggleFavourites(recipe._id);
+    toggleFavourite(recipe._id);
   };
   return (
     <TouchableOpacity
@@ -58,16 +62,19 @@ const RecipeItem: React.FC<recipeItemProp> = ({
           <TouchableOpacity
             onPress={handleFavoritePress}
             style={styles.iconButton}>
-            <View
-              style={[
-                styles.iconWrapper,
-                favorite[recipe._id] && styles.favoriteActive,
-              ]}>
-              {favorite[recipe._id] ? (
-                <Ionicons style={styles.favoriteIcon} name={'heart'} color={'red'} />
-              ) : (
-                <Ionicons style={styles.favoriteIcon} name={'heart-outline'} color={'black'} />
-              )}
+            <View style={[styles.iconWrapper]}>
+              {
+                isFavourite(recipe._id)? <Ionicons
+                style={styles.favoriteIcon}
+                name={'heart'}
+                color={'red'}
+              />: 
+              <Ionicons
+                style={styles.favoriteIcon}
+                name={'heart-outline'}
+                color={'black'}
+              />
+              }
             </View>
           </TouchableOpacity>
         )}
@@ -78,7 +85,11 @@ const RecipeItem: React.FC<recipeItemProp> = ({
             onPress={deleteSingleRecipe}
             style={styles.iconButton}>
             <View style={[styles.iconWrapper, styles.deleteWrapper]}>
-              <Ionicons style={styles.deleteIcon} name={'trash'} color={'black'} />
+              <Ionicons
+                style={styles.deleteIcon}
+                name={'trash'}
+                color={'black'}
+              />
             </View>
           </TouchableOpacity>
         )}

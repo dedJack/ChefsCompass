@@ -89,8 +89,8 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
         email,
         password,
       });
-      // console.log(result);
       const {token, userId, success} = result.data;
+      console.log(token);
       if (success) {
         //save token and userid to asyncStorage.
         await AsyncStorage.setItem('token', token);
@@ -135,7 +135,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
 
       if (validToken.data.success) {
         return true;
-      }else{
+      } else {
         return false;
       }
     } catch (e) {

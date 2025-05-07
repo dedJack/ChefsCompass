@@ -20,29 +20,31 @@ type FavoriteScreenProp = {
 };
 
 const FavoritesScreen: React.FC<FavoriteScreenProp> = ({navigation}) => {
-  const {favorite} = useContext(FavouriteContext);
+  const context = useContext(FavouriteContext);
+  if(!context){
+    throw new Error('FavouriteContext is not available');
+  }
+  const {favorite} = context;
   const {recipes} = useContext(RecipeContext);
   const {userId} = useContext(AuthContext);
 
-  const filteredFavorites = recipes.filter(
-    recipe =>
-      favorite[recipe._id] && // user marked it as favorite
-      recipe.createdBy !== userId // but the user didn't create it
-  );
+
   
   return (
     <View style={{flex: 1}}>
-      {filteredFavorites.length > 0 ? (
+      {favorite.length > 0 ? (
         <FlatList
-          data={filteredFavorites}
-          renderItem={({item}) => (
-            <RecipeItem
-              recipe={item}
-              onPressRecipeItem={() =>
-                navigation.navigate('RecipeDetail', {recipeId: item._id})
-              }
-              />
-          )}
+          data={favorite}
+          renderItem={({item})=>{
+            const recipe = recipes.find(r => r._id===item.recipeId)
+            if(!recipe){
+              return null;
+            }
+            return(
+              <RecipeItem recipe={recipe}
+              onPressRecipeItem={()=>navigation.navigate('RecipeDetail',{recipeId:item.recipeId})}/>
+            )
+          }}
           contentContainerStyle={{paddingBottom: 20}} // Add some bottom padding
         />
       ) : (

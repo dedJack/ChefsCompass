@@ -1,9 +1,11 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import React from 'react';
 import MyRecipe from '../screens/MyRecipe';
 import HomeScreen from '../screens/HomeScreen';
 import Favourite from '../screens/Favourite';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Platform } from 'react-native';
 export type BottomTabScreenTypeProp = {
   MyRecipe: undefined;
   HomeScreen: undefined;
@@ -34,22 +36,26 @@ const TabNavigation: React.FC = () => {
     return <Ionicons name={iconName} size={size} color={color} />;
   };
 
+  const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
       screenOptions={({route}) => ({
-        tabBarShowLabel: false,
+        tabBarShowLabel: true,
         tabBarIcon: ({focused, color, size}) =>
           getTabBarIcon(route.name, focused, color, size),
         tabBarStyle: {
-          marginBottom: 20,
-          marginHorizontal: 10,
+          position: 'absolute', marginBottom: Platform.OS === 'ios' ? insets.bottom + 10 : 15,
+          marginHorizontal:8,
+         
+          paddingVertical: 15,
           borderRadius: 15,
-          paddingTop: 15,
           backgroundColor: 'rgb(2, 79, 107)',
           shadowOffset: {
             width: 0,
             height: 2,
           },
+          shadowOpacity: 0.3,
+          shadowRadius: 4,
           elevation: 5,
         },
         tabBarActiveTintColor:'#ee5bc4',
@@ -57,11 +63,11 @@ const TabNavigation: React.FC = () => {
       })}>
       <Tab.Screen
         name="HomeScreen"
-        options={{headerShown: false, tabBarLabel: 'blue'}}
+        options={{headerShown: false, tabBarLabel: 'Home'}}
         component={HomeScreen}
       />
-      <Tab.Screen name="MyRecipe" component={MyRecipe} />
-      <Tab.Screen name="Favourites" component={Favourite} />
+      <Tab.Screen name="MyRecipe" options={{ tabBarLabel: 'My Recipe', title:"Chef's Collection"}} component={MyRecipe} />
+      <Tab.Screen name="Favourites" options={{title:"My Shortlist"}} component={Favourite} />
     </Tab.Navigator>
   );
 };
